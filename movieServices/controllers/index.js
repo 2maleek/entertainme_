@@ -61,14 +61,11 @@ class MoviesController {
       .then(isFound => {
         if (isFound) {
           oldata = isFound;
-          console.log(isFound);
           return Movie.deleteMovieById(req.params.id);
         }
         throw res.status(404).json({ message: "Movie not found" });
       })
       .then(result => {
-        console.log("olddata >>>>>>>>>>>>");
-        console.log(oldata);
         res.status(200).json(oldata);
       })
       .catch(err => {
