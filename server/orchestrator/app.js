@@ -1,7 +1,7 @@
 const { ApolloServer, gql } = require("apollo-server");
 const axios = require("axios");
-const movieUrl = "http://localhost:3001/movies/";
-const tvSeriesUrl = "http://localhost:3002/tvseries/";
+const movieUrl = "http://localhost:3002/movies/";
+const tvSeriesUrl = "http://localhost:3003/tvseries/";
 const Redis = require("ioredis");
 const redis = new Redis();
 
@@ -263,6 +263,6 @@ const resolvers = {
 
 const server = new ApolloServer({ typeDefs, resolvers });
 
-server.listen().then(({ url }) => {
+server.listen(3001).then(({ url }) => {
   console.log(`Server ready at ${url}`);
 });
