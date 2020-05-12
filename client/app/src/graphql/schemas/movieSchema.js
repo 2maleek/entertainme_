@@ -30,7 +30,25 @@ export const GET_MOVIES = gql`
 export const ADD_MOVIE = gql`
 	mutation AddMovie($movie: InputMnT) {
 		addMovie(movie: $movie) {
+			_id
 			title
+			overview
+			poster_path
+			popularity
+			tags
+		}
+	}
+`;
+
+export const UPDATE_MOVIE = gql`
+	mutation UpdateMovie($movieId: ID!, $movie: InputMnT) {
+		updateMovie(movieId: $movieId, movie: $movie) {
+			_id
+			title
+			overview
+			poster_path
+			popularity
+			tags
 		}
 	}
 `;

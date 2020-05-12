@@ -54,7 +54,15 @@ function Movies() {
 				<Button variant="primary" type="button" onClick={handleShow}>
 					Add New Movie
 				</Button>
-
+				<div className="container">
+					<div className="row">
+						{data.movies.map(movie => (
+							<div className="col-md-3" key={movie._id}>
+								<Card data={movie} crud={true} />
+							</div>
+						))}
+					</div>
+				</div>
 				<Modal show={show} onHide={handleClose}>
 					<Modal.Header closeButton>
 						<Modal.Title>Movies</Modal.Title>
@@ -125,15 +133,6 @@ function Movies() {
 						</Button>
 					</Modal.Footer>
 				</Modal>
-				<div className="container">
-					<div className="row">
-						{data.movies.map(movie => (
-							<div className="col-md-3" key={movie._id}>
-								<Card data={movie} crud={true} />
-							</div>
-						))}
-					</div>
-				</div>
 			</>
 		);
 }
