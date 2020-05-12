@@ -28,20 +28,8 @@ export const GET_MOVIES = gql`
 // `;
 
 export const ADD_MOVIE = gql`
-	mutation AddMovie(
-		$title: String
-		$overview: String
-		$poster_path: String
-		$popularity: Float
-		$tags: [String]
-	) {
-		addMovie(
-			title: $title
-			overview: $overview
-			poster_path: $poster_path
-			popularity: $popularity
-			tags: $tags
-		) {
+	mutation AddMovie($movie: InputMnT) {
+		addMovie(movie: $movie) {
 			title
 		}
 	}

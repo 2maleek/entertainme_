@@ -11,8 +11,6 @@ import Navbar from "../components/NavigationBar";
 import { Button, Modal, Form } from "react-bootstrap";
 
 function Movies() {
-	const { loading, error, data } = useQuery(GET_MOVIES);
-	const [addMovie] = useMutation(ADD_MOVIE);
 	const [show, setShow] = useState(false);
 	const [title, setTitle] = useState("");
 	const [overview, setOverview] = useState("");
@@ -20,6 +18,31 @@ function Movies() {
 	const [popularity, setPopularity] = useState("");
 	const [tags, setTags] = useState("");
 
+	const { loading, error, data } = useQuery(GET_MOVIES);
+	const [addMovie] = useMutation(ADD_MOVIE, {
+		refetchQueries: [{ query: GET_MOVIES }]
+	});
+
+	function resetForm() {
+		setTitle("");
+		setOverview("");
+		setPosterPath("");
+		setPopularity(0);
+		setTags("");
+	}
+
+	function saveNewData(e) {
+		e.preventDefault();
+		let InputMnT = {
+			title,
+			overview,
+			poster_path: posterPath,
+			popularity,
+			tags
+		};
+		addMovie({ variables: { movie: InputMnT } });
+		resetForm();
+	}
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
 	if (loading) return <p>Loading...</p>;
@@ -28,7 +51,7 @@ function Movies() {
 		return (
 			<>
 				<Navbar />
-				<Button variant="primary" onClick={handleShow}>
+				<Button variant="primary" type="button" onClick={handleShow}>
 					Add New Movie
 				</Button>
 
@@ -37,28 +60,52 @@ function Movies() {
 						<Modal.Title>Movies</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						<Form>
+						<Form onSubmit={saveNewData}>
 							<Form.Group>
 								<Form.Label>Title</Form.Label>
-								<Form.Control type="text" placeholder="Title" />
+								<Form.Control
+									type="text"
+									placeholder="Title"
+									onChange={e => setTitle(e.target.value)}
+								/>
 							</Form.Group>
 							<Form.Group>
 								<Form.Label>Overview</Form.Label>
-								<Form.Control as="textarea" rows="3" placeholder="Overview" />
+								<Form.Control
+									as="textarea"
+									rows="3"
+									placeholder="Overview"
+									onChange={e => setOverview(e.target.value)}
+								/>
 							</Form.Group>
 							<Form.Group>
 								<Form.Label>Poster Path</Form.Label>
-								<Form.Control type="text" placeholder="Poster Path" />
+								<Form.Control
+									type="text"
+									placeholder="Poster Path"
+									onChange={e => setPosterPath(e.target.value)}
+								/>
 							</Form.Group>
 							<Form.Group>
 								<Form.Label>Popularity</Form.Label>
-								<Form.Control type="text" placeholder="Popularity" />
+								<Form.Control
+									type="text"
+									placeholder="Popularity"
+									onChange={e => {
+										let value = parseFloat(e.target.value);
+										setPopularity(value);
+									}}
+								/>
 							</Form.Group>
 							<Form.Group>
 								<Form.Label>Tags</Form.Label>
 								<Form.Control
 									type="text"
 									placeholder="Tags (separate with comma ','"
+									onChange={e => {
+										let value = e.target.value.split(",");
+										setTags(value);
+									}}
 								/>
 							</Form.Group>
 						</Form>
@@ -67,8 +114,14 @@ function Movies() {
 						<Button variant="secondary" onClick={handleClose}>
 							Close
 						</Button>
-						<Button variant="primary" onClick={handleClose}>
-							Save Changes
+						<Button
+							variant="primary"
+							onClick={e => {
+								handleClose(e);
+								saveNewData(e);
+							}}
+						>
+							Save
 						</Button>
 					</Modal.Footer>
 				</Modal>
