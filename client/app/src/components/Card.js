@@ -1,16 +1,27 @@
 import React, { useState } from "react";
 import { Card, Button, InputGroup, Modal, Form } from "react-bootstrap";
 import alertify from "alertifyjs";
+import gql from "graphql-tag";
+
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import {
 	GET_MOVIES,
 	DELETE_MOVIE,
 	UPDATE_MOVIE
 } from "../graphql/schemas/movieSchema";
-
+import Detail from "../pages/Detail";
+import { Switch, Route, Link } from "react-router-dom";
 function CardComponent(props) {
 	let crud = props.crud;
-
+	const ADDFAVORITES = gql`
+		mutation addFav($_id: ID, $title: String, $poster_path: String) {
+			addFav(_id: $_id, title: $title, poster_path: $poster_path) @client {
+				_id
+				title
+				poster_path
+			}
+		}
+	`;
 	const [movieId, setMovieId] = useState(null);
 	const [show, setShow] = useState(false);
 	const [title, setTitle] = useState("");
@@ -70,14 +81,27 @@ function CardComponent(props) {
 		updateMovie({ variables: { movieId: movieId, movie: InputMnT } });
 		resetForm();
 	}
+	const [dataToFav] = useMutation(ADDFAVORITES);
+
+	const addToFav = () => {
+		dataToFav({
+			variables: {
+				_id: props.data._id,
+				title: props.data.title,
+				poster_path: props.data.poster_path
+			}
+		});
+	};
 
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
-
+	const url = "/detail/".concat(props.data._id);
 	return (
 		<>
-			<Card style={{ width: "18rem" }}>
-				<Card.Img variant="top" src={props.data.poster_path} />
+			<Card style={{ width: "15rem" }}>
+				<Link to={url}>
+					<Card.Img variant="top" src={props.data.poster_path} />
+				</Link>
 				<Card.Body>
 					<Card.Title>{props.data.title}</Card.Title>
 					<Card.Text>{props.data.overview}</Card.Text>
@@ -86,6 +110,9 @@ function CardComponent(props) {
 					</Card.Text>
 					<Card.Text>Tags: {props.data.tags}</Card.Text>
 
+					<Button variant="warning" className="mr-2" onClick={addToFav}>
+						Add Favorite
+					</Button>
 					{crud ? (
 						<>
 							<InputGroup.Append>
@@ -184,6 +211,11 @@ function CardComponent(props) {
 					</Button>
 				</Modal.Footer>
 			</Modal>
+			<Switch>
+				<Route path={"detail/:movieId"}>
+					<Detail />
+				</Route>
+			</Switch>
 		</>
 	);
 }

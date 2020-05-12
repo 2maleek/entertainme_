@@ -1,14 +1,24 @@
 import React from "react";
 import "./App.css";
 import { ApolloProvider } from "@apollo/react-hooks";
-import client from "./graphql/graphql";
+import client from "./graphql/schemas/favoriteSchema";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Entertainme, Movies, TvSeries, Favorites, Home } from "./pages";
+import {
+	Entertainme,
+	Movies,
+	TvSeries,
+	Favorites,
+	Home,
+	Detail
+} from "./pages";
 function App() {
 	return (
 		<ApolloProvider client={client}>
 			<Router>
 				<Switch>
+					<Route path="/detail/:movieId">
+						<Detail />
+					</Route>
 					<Route path="/entertainme">
 						<Entertainme />
 					</Route>

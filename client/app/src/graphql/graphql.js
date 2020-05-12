@@ -1,5 +1,5 @@
 import ApolloClient, { gql } from "apollo-boost";
-import { GET_FAVORITES } from "./schemas/favoriteSchema";
+import { GETFAVORITES } from "./schemas/favoriteSchema";
 
 export default new ApolloClient({
 	uri: "http://localhost:3001",
@@ -8,7 +8,7 @@ export default new ApolloClient({
 			Mutation: {
 				addFavorite(_, variables, client) {
 					const { favorites } = client.cache.readQuery({
-						query: GET_FAVORITES
+						query: GETFAVORITES
 					});
 					const newFavorite = {
 						__typename: "favorite",

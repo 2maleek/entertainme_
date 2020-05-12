@@ -12,20 +12,18 @@ export const GET_MOVIES = gql`
 		}
 	}
 `;
-// export const GET_MOVIE_BY_ID = gql`
-// 	query {
-// 		Movie($movieId: ID) {
-// 			movie(movieId: $movieID){
-// 				_id
-// 				title
-// 				overview
-// 				poster_path
-// 				popularity
-// 				tags
-// 			}
-// 		}
-// 	}
-// `;
+export const GET_MOVIE_BY_ID = gql`
+	query Movie($movieId: ID!) {
+		movie(movieId: $movieId) {
+			_id
+			title
+			overview
+			poster_path
+			popularity
+			tags
+		}
+	}
+`;
 
 export const ADD_MOVIE = gql`
 	mutation AddMovie($movie: InputMnT) {

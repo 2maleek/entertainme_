@@ -14,15 +14,18 @@ function Entertainme() {
 		return (
 			<>
 				<Navbar />
-				<div className="container">
+				<div className="container-fluid mt-5">
 					<div className="row">
 						{data.tvSeries.map(tvSerie => (
-							<div className="col-md-3" key={tvSerie._id}>
+							<div
+								className="cols col-sm-6 col-md-4 col-lg-3"
+								key={tvSerie._id}
+							>
 								<Card data={tvSerie} />
 							</div>
 						))}
 						{data.movies.map(movie => (
-							<div className="col-md-3" key={movie._id}>
+							<div className="cols col-sm-6 col-md-4 col-lg-3" key={movie._id}>
 								<Card data={movie} crud={true} />
 							</div>
 						))}
